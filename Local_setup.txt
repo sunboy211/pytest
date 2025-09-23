@@ -1,0 +1,65 @@
+linlin, 2286602
+London.1234, 1130, WANGL07
+Linlin_Token: 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
+
+-------------------------------------------------------------------------
+tar xzf xxx.tar.gz (run xx.tar.gz file)
+
+/home/linlin/ZOE/vetscan-hub-1.15.0/
+clear-up: sudo ./vetscan-hub/soft-factory-reset.sh
+ ./start.sh (start Hub server)
+ ./stop.sh
+ ./install.sh (vetscan_user=linlin)
+ /opt/vetscan-hub/ic-frontend.AppImage --dev=true --no-sandbox (open GUI, without sudo)
+
+ sudo systemctl status ic-server (display ic-server status)
+
+sudo systemctl restart ic-server (restart ic-server service)
+
+Simulator-Docker: /home/linlin/ZOE/dpqa/zoetisqa/simulator
+docker login ghcr.io (password is Linlin_token, only first time to use)
+docker container ls (display all running docker container)
+docker compose down (stop all containers)
+docker compose up -d (start simulator docker image)
+
+sudo journalctl -u ic-server.service -f (display server logs)
+
+sudo journalctl -u ic-server.service > server.log (need to e.g. more log details)
+
+Hub-Docker: /home/linlin/ZOE/vetscan-hub-docker-1.15.0-xxx/
+docker load --input=docker-images.tar (load all docker images)
+docker image ls (show all docker images)
+docker ps (show all docker containers)
+./start.sh -m qa (start ic-server of hub application)
+./ic-frontend.AppImage (open GUI)
+
+
+Simulator-Docker: /home/linlin/ZOE/dpqa/zoetisqa/simulator
+docker login ghcr.io (password is Linlin_token)
+docker container ls (display all running docker container)
+docker compose down (stop all containers)
+
+docker compose up -d (start simulator docker image)
+
+DPQA test execution: /home/linlin/ZOE/dpqa/
+python3 -m venv linlinvenv (create virtual env venv, name it to linlinvenv)
+source linlinvenv/bin/activate (invoke env. -- create linlinvenv folder)
+pip3 install -r requirements.txt  (configure local env. )
+
+/home/linlin/ZOE/dpqa/tests/
+pytest -k onboarding_test::test_patient_owner_search (execute the specific method)
+pytest orders_test.py (execute all tests in the file) 
+
+pytest -k test_patient_owner_search
+
+pytest -k test_patient_owner_search
+
+
+
+
+
+
+
+
+
+
