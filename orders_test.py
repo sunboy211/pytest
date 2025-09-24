@@ -1,17 +1,16 @@
 from datetime import datetime, timedelta
 
 import pytest
-from datetime import datetime
 from pytest import mark
 
 from zoetisqa.helpers import MenuHelper, Logger
 from zoetisqa.helpers.api import PatientAPIHelper
+from zoetisqa.helpers.api import TestsAPIHelper
 from zoetisqa.helpers.constants import ResultStatusValues, SimulatorScenarios, ScenarioNumber, AnalyzerTests
 from zoetisqa.helpers.patient import PatientHelper
 from zoetisqa.helpers.results import ResultHelper
 from zoetisqa.helpers.tests import TestProgressHelper, TestsHelper
 from zoetisqa.models.clinic import Order, Patient, AnalyteResult
-import time
 
 
 class TestOrders:
@@ -171,26 +170,26 @@ class TestOrders:
         date_on_pending = "Created at"
         date_on_results = "Done at"
         current_date = datetime.now().strftime("%m/%d/%Y")
-        patient = Patient()
-        #test_api_helper = TestsAPIHelper()
-        #test_api_helper.create()
-        tests_helper = MenuHelper().tests_tab()
+        patient = PatientAPIHelper().create()
         test = AnalyzerTests.COMPLETE_BLOOD_COUNT
-        test_order = TestOrders()
-        test_row_pending = test_order._create_test_order(patient, test, use_api=True)
+        test_code = AnalyzerTests.TEST_CODES[test]
+        TestsAPIHelper().create(patient_id=patient.internal_id, test_code=test_code)
 
-        assert test_row_pending[6].text == "Pending"
-        text_lines = test_row_pending[5].text.split('\n')
+        # Validate Date&Time column when test status is Pending
+        tests_helper = MenuHelper().tests_tab()
+        test_row_pending = tests_helper.search_test_list(query=patient.animal_id)
+        tests_helper.wait_for_pending_test_status(patient=patient, test=test)
+        assert test_row_pending[5].text == "Pending"
+        text_lines = test_row_pending[4].text.split('\n')
         assert text_lines[0] == date_on_pending, f"Expected first line '{date_on_pending}' but got '{text_lines[0]}'"
         date_part = text_lines[-1].split(',')[-1].strip()
         assert date_part == current_date, f"Expected date '{current_date}' but got '{date_part}'"
 
-        #time.sleep(30)
+        # Validate Date&Time column when test status is Results
         tests_helper.wait_for_complete_test_status(patient=patient, test=test)
-
         test_row_results = tests_helper.search_test_list(query=patient.animal_id)
-        assert test_row_results[6].text == "Results"
-        text_lines = test_row_results[5].text.split('\n')
+        assert test_row_results[5].text == "Results"
+        text_lines = test_row_results[4].text.split('\n')
         assert text_lines[0] == date_on_results, f"Expected first line '{date_on_results}' but got '{text_lines[0]}'"
         date_part = text_lines[-1].split(',')[-1].strip()
         assert date_part == current_date, f"Expected date '{current_date}' but got '{date_part}'"
