@@ -1,21 +1,24 @@
-1. Vetscanh-hub/Check ic-server up and running: 
-sudo systemctl status ic-server 
+1. Vetscanh-hub/Check ic-server up and running:  (check the hub-service status, ignore)
+sudo systemctl status ic-server
 
-2. Vetscan-hub/Open hub-GUI to complete the onboarding process manually:  
+# Only used when download new xxx.tar.zip file, and deploy the new hub; if start an existing old hub, ignore this step
+/home/linlin/ZOE/vetscan-hub-1.15.0/  
+sudo ./stop.sh
+ nano ./install.sh (edit it, vetscan_user=linlin, linlin is my local linux user name)
+ sudo ./install.sh -m qa ( install hub, and connect Pims qa environment)
+sudo ./start.sh (start Hub server)
+
+# Open hub-GUI to complete the onboarding process manually
+2. /Vetscan-hub/  
 /opt/vetscan-hub/ic-frontend.AppImage --dev=true --no-sandbox   (open GUI)
-/opt/vetscan-hub/ic-frontend.AppImage --dev true --no-sandbox
+/opt/vetscan-hub/ic-frontend.AppImage --dev true --no-sandbox (Open GUI by development mode)
 
-/opt/vetscan-hub/ic-frontend.AppImage --dev true --no-sandbox
-
-3. Vetscan-hub/Restart ic-server to complete Hub-GUI onboarding process
+# Restart ic-server to trigger Hub-GUI onboarding process completing
+3. Vetscan-hub/
 sudo systemctl restart ic-server
 
-4. ZEO/dpqa/simulator/Re-start simulator docker images, to secure all simulators can display successfully
-docker container ls (display all running docker container)
+# Re-start simulator docker images, to secure all simulators can display successfully. 
+4. /dpqa/simulator/
+docker container ls (display all running docker container, can ignore)
 docker compose down (stop all containers)
-docker compose up -d (start simulator docker image)
-
-5. PyCharm/Debug run the test case: onboarding_test/def test_patient_owner_search(self, hub_app, start_analyzers)
-
-
-
+docker compose up -d (start all simulator docker image)
